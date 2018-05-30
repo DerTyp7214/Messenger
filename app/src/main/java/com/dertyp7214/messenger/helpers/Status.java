@@ -5,15 +5,15 @@
 
 package com.dertyp7214.messenger.helpers;
 
-import android.graphics.Bitmap;
+import android.graphics.drawable.Drawable;
 
 public class Status {
 
     private String name;
-    private Bitmap image;
+    private Drawable image;
     private boolean seen;
 
-    public Status(String name, Bitmap image, boolean seen){
+    public Status(String name, Drawable image, boolean seen){
         this.name=name;
         this.image=image;
         this.seen=seen;
@@ -23,7 +23,7 @@ public class Status {
         return this.name;
     }
 
-    public Bitmap getImage(){
+    public Drawable getImage(){
         return this.image;
     }
 

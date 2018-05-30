@@ -57,7 +57,7 @@ public class StatusAdapter extends RecyclerView.Adapter<StatusAdapter.MyViewHold
         final Status listItem = itemList.get(position);
         final ThemeManager themeManager = ThemeManager.instance(context);
 
-        holder.image.setImageBitmap(listItem.getImage());
+        holder.image.setImageDrawable(listItem.getImage());
         holder.image.setBorderColor(listItem.isSeen() ? Color.LTGRAY : context.getResources().getColor(R.color.colorAccent));
     }
 

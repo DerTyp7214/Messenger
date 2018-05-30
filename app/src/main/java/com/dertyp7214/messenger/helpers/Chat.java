@@ -5,14 +5,14 @@
 
 package com.dertyp7214.messenger.helpers;
 
-import android.graphics.Bitmap;
+import android.graphics.drawable.Drawable;
 
 public class Chat {
 
     private String time, lastMessage, contactName;
-    private Bitmap profileImage;
+    private Drawable profileImage;
 
-    public Chat(String time, String lastMessage, String contactName, Bitmap profileImage){
+    public Chat(String time, String lastMessage, String contactName, Drawable profileImage){
         this.time=time;
         this.lastMessage=lastMessage;
         this.contactName=contactName;
@@ -31,7 +31,7 @@ public class Chat {
         return this.contactName;
     }
 
-    public Bitmap getProfileImage(){
+    public Drawable getProfileImage(){
         return this.profileImage;
     }
 }

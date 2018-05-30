@@ -38,7 +38,7 @@ public class ChatsAdapter extends RecyclerView.Adapter<ChatsAdapter.ViewHolder> 
         viewHolder.time.setText(chat.getTime());
         viewHolder.lastMessage.setText(chat.getLastMessage());
         viewHolder.contact.setText(chat.getContactName());
-        viewHolder.imageView.setImageBitmap(chat.getProfileImage());
+        viewHolder.imageView.setImageDrawable(chat.getProfileImage());
     }
 
     @Override

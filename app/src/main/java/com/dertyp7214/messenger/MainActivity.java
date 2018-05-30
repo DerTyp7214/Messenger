@@ -21,6 +21,12 @@ import com.dertyp7214.messenger.adapter.ChatsAdapter;
 import com.dertyp7214.messenger.adapter.StatusAdapter;
 import com.dertyp7214.messenger.helpers.Chat;
 import com.dertyp7214.messenger.helpers.Status;
+import com.dertyp7214.messenger.helpers.TelegramHelper;
+
+import org.telegram.api.chat.TLAbsChat;
+import org.telegram.api.chat.TLChat;
+import org.telegram.api.dialog.TLDialog;
+import org.telegram.tl.TLVector;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -34,6 +40,7 @@ public class MainActivity extends AppCompatActivity {
     private ChatsAdapter chatAdapter;
     private List<Status> statusList = new ArrayList<>();
     private List<Chat> chatList = new ArrayList<>();
+    private TelegramHelper telegramHelper;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,14 +68,13 @@ public class MainActivity extends AppCompatActivity {
         contactsRecyclerView.setItemAnimator(new DefaultItemAnimator());
         contactsRecyclerView.setAdapter(chatAdapter);
 
+        telegramHelper = TelegramHelper.getInstance(this);
+
         setColors();
 
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                getStatusList();
-                getChatList();
-            }
+        new Thread(() -> {
+            getStatusList();
+            getChatList();
         }).start();
 
     }
@@ -77,13 +83,10 @@ public class MainActivity extends AppCompatActivity {
         int color = ThemeManager.instance(this).getNavigationBarColor();
         ValueAnimator animator = ValueAnimator.ofObject(new ArgbEvaluator(), getWindow().getNavigationBarColor(), color);
         animator.setDuration(250);
-        animator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
-            @Override
-            public void onAnimationUpdate(ValueAnimator animation) {
-                getWindow().setNavigationBarColor((int) animation.getAnimatedValue());
-                if(!Utils.isColorDark((int) animation.getAnimatedValue()) && Build.VERSION.SDK_INT >= Build.VERSION_CODES.O){
-                    toolbar.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR);
-                }
+        animator.addUpdateListener(animation -> {
+            getWindow().setNavigationBarColor((int) animation.getAnimatedValue());
+            if(!Utils.isColorDark((int) animation.getAnimatedValue()) && Build.VERSION.SDK_INT >= Build.VERSION_CODES.O){
+                toolbar.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR);
             }
         });
         animator.start();
@@ -96,43 +99,33 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void getStatusList(){
-        statusList.add(new Status("Peter", Utils.getBitmapFromUrl("https://www.freeiconspng.com/uploads/profile-icon-9.png"), false));
-        statusList.add(new Status("Peter", Utils.createImage(80, 80, Color.GREEN), true));
-        statusList.add(new Status("Peter", Utils.createImage(80, 80, Color.GREEN), false));
-        statusList.add(new Status("Peter", Utils.createImage(80, 80, Color.GREEN), false));
-        statusList.add(new Status("Peter", Utils.createImage(80, 80, Color.GREEN), false));
-        statusList.add(new Status("Peter", Utils.createImage(80, 80, Color.GREEN), true));
-        statusList.add(new Status("Peter", Utils.createImage(80, 80, Color.GREEN), false));
-        statusList.add(new Status("Peter", Utils.createImage(80, 80, Color.GREEN), false));
-        statusList.add(new Status("Peter", Utils.createImage(80, 80, Color.GREEN), false));
-        statusList.add(new Status("Peter", Utils.createImage(80, 80, Color.GREEN), true));
-        statusList.add(new Status("Peter", Utils.createImage(80, 80, Color.GREEN), false));
-        statusList.add(new Status("Peter", Utils.createImage(80, 80, Color.GREEN), false));
-        statusList.add(new Status("Peter", Utils.createImage(80, 80, Color.GREEN), false));
-        runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                statusAdapter.notifyDataSetChanged();
-            }
-        });
+        statusList.add(new Status("Peter", Utils.getImageFromUrl(this,"https://jboyecom.files.wordpress.com/2017/04/profile-icon-9.png?w=512"), false));
+        statusList.add(new Status("Peter", Utils.createImage(this,80, 80, Color.GREEN), true));
+        statusList.add(new Status("Peter", Utils.createImage(this,80, 80, Color.GREEN), false));
+        statusList.add(new Status("Peter", Utils.createImage(this,80, 80, Color.GREEN), false));
+        statusList.add(new Status("Peter", Utils.createImage(this,80, 80, Color.GREEN), false));
+        statusList.add(new Status("Peter", Utils.createImage(this,80, 80, Color.GREEN), true));
+        statusList.add(new Status("Peter", Utils.createImage(this,80, 80, Color.GREEN), false));
+        statusList.add(new Status("Peter", Utils.createImage(this,80, 80, Color.GREEN), false));
+        statusList.add(new Status("Peter", Utils.createImage(this,80, 80, Color.GREEN), false));
+        statusList.add(new Status("Peter", Utils.createImage(this,80, 80, Color.GREEN), true));
+        statusList.add(new Status("Peter", Utils.createImage(this,80, 80, Color.GREEN), false));
+        statusList.add(new Status("Peter", Utils.createImage(this,80, 80, Color.GREEN), false));
+        statusList.add(new Status("Peter", Utils.createImage(this,80, 80, Color.GREEN), false));
+        runOnUiThread(() -> statusAdapter.notifyDataSetChanged());
     }
 
     private void getChatList(){
-        chatList.add(new Chat("00:00", "Hallo", "Peter", Utils.createImage(80, 80, Color.GREEN)));
-        chatList.add(new Chat("00:00", "Hallo", "Peter", Utils.createImage(80, 80, Color.GREEN)));
-        chatList.add(new Chat("00:00", "Hallo", "Peter", Utils.createImage(80, 80, Color.GREEN)));
-        chatList.add(new Chat("00:00", "Hallo", "Peter", Utils.createImage(80, 80, Color.GREEN)));
-        chatList.add(new Chat("00:00", "Hallo", "Peter", Utils.createImage(80, 80, Color.GREEN)));
-        chatList.add(new Chat("00:00", "Hallo", "Peter", Utils.createImage(80, 80, Color.GREEN)));
-        chatList.add(new Chat("00:00", "Hallo", "Peter", Utils.createImage(80, 80, Color.GREEN)));
-        chatList.add(new Chat("00:00", "Hallo", "Peter", Utils.createImage(80, 80, Color.GREEN)));
-        chatList.add(new Chat("00:00", "Hallo", "Peter", Utils.createImage(80, 80, Color.GREEN)));
-        chatList.add(new Chat("00:00", "Hallo", "Peter", Utils.createImage(80, 80, Color.GREEN)));
-        runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                chatAdapter.notifyDataSetChanged();
-            }
-        });
+        chatList.add(new Chat("00:00", "Hallo", "Peter", Utils.createImage(this,80, 80, Color.GREEN)));
+        chatList.add(new Chat("00:00", "Hallo", "Peter", Utils.createImage(this,80, 80, Color.GREEN)));
+        chatList.add(new Chat("00:00", "Hallo", "Peter", Utils.createImage(this,80, 80, Color.GREEN)));
+        chatList.add(new Chat("00:00", "Hallo", "Peter", Utils.createImage(this,80, 80, Color.GREEN)));
+        chatList.add(new Chat("00:00", "Hallo", "Peter", Utils.createImage(this,80, 80, Color.GREEN)));
+        chatList.add(new Chat("00:00", "Hallo", "Peter", Utils.createImage(this,80, 80, Color.GREEN)));
+        chatList.add(new Chat("00:00", "Hallo", "Peter", Utils.createImage(this,80, 80, Color.GREEN)));
+        chatList.add(new Chat("00:00", "Hallo", "Peter", Utils.createImage(this,80, 80, Color.GREEN)));
+        chatList.add(new Chat("00:00", "Hallo", "Peter", Utils.createImage(this,80, 80, Color.GREEN)));
+        chatList.add(new Chat("00:00", "Hallo", "Peter", Utils.createImage(this,80, 80, Color.GREEN)));
+        runOnUiThread(() -> chatAdapter.notifyDataSetChanged());
     }
 }
